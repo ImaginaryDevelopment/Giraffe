@@ -13,7 +13,7 @@ open Shared
 
 
 
-
+module RProps = Fable.Helpers.React.Props
 // The model holds data that you want to keep track of while the application is running
 // in this case, we are keeping track of a counter
 // we mark it as optional, because initially it will not be available from the client
@@ -82,6 +82,38 @@ let show = function
 | { Counter = Some counter } -> string counter.Value
 | { Counter = None   } -> "Loading..."
 
+let loginComponent model dispatch =
+    div [] [
+        hr []
+        section [][
+            h2 [] [
+                str "Non-Ajax version"
+
+            ]
+            div [] [
+
+                form[RProps.Method "post";RProps.Action "/api/authentication/login"][
+                    label [] [str "Username:"]
+                    input [Name "username"]
+                    label [] [str "Password:"]
+                    input [RProps.Type "password"; Name"password"]
+                    input [RProps.Type "submit";Value "Login"]
+                ]
+
+            ]
+        ]
+
+        hr[]
+        // section [][
+        //     h2 [] [ str "Ajax version"]
+        //     div [][
+
+        //     ]
+        // ]
+        // hr[]
+
+    ]
+
 let view (model : Model) (dispatch : Msg -> unit) =
     div []
         [ h1 [] [ str "SAFE Template" ]
@@ -90,7 +122,9 @@ let view (model : Model) (dispatch : Msg -> unit) =
           button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ]
           div [] [ str (show model) ]
           button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ]
+          loginComponent model dispatch
           safeComponents ]
+
 
 #if DEBUG
 open Elmish.Debug
