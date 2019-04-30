@@ -147,29 +147,24 @@ let loginComponent (model:Model) (dispatch:Msg -> unit) =
             ]
         ]
         hr[]
-        makeSection "Ajax version" [
-            // if the below is wrapped in a form, the form has values and it gets a 401 unauthorized from the ajax call
-            // then it navigates to the current page with the values added as a query string
-            //  which restarts the elm app. (stored values/model is lost and reinitialized)
-            form[Id "ajax"] (
-                let ajaxDispatch = AjaxMessage >> dispatch
-                let onAjaxChange messageWrapper =
-                    getValue
-                    >> messageWrapper
-                    >> ajaxDispatch
-                [
-                    label [] [str "Username:"]
-                    input [Name "username"; DefaultValue model.AjaxModel.Username; OnChange (onAjaxChange AjaxMessage.UpdateUsername)]
-                    label [] [str "Password:"]
-                    input [RProps.Type "password"; Name"password";DefaultValue model.AjaxModel.Password; OnChange(onAjaxChange AjaxMessage.UpdatePassword)]
-                    button [
-                        match model.AjaxModel.Username with
-                        | null | "" -> ()
-                        | _ -> yield RProps.OnClick (fun _ -> AjaxMessage.SendAjax |> AjaxMessage |> dispatch)][ str "Login"]
-                    div [] [str model.AjaxModel.AjaxStatusMessage]
-                ]
-            )
-        ]
+        makeSection "Ajax version" (
+            let ajaxDispatch = AjaxMessage >> dispatch
+            let onAjaxChange messageWrapper =
+                getValue
+                >> messageWrapper
+                >> ajaxDispatch
+            [
+                label [] [str "Username:"]
+                input [Name "username"; DefaultValue model.AjaxModel.Username; OnChange (onAjaxChange AjaxMessage.UpdateUsername)]
+                label [] [str "Password:"]
+                input [RProps.Type "password"; Name"password";DefaultValue model.AjaxModel.Password; OnChange(onAjaxChange AjaxMessage.UpdatePassword)]
+                button [
+                    match model.AjaxModel.Username with
+                    | null | "" -> ()
+                    | _ -> yield RProps.OnClick (fun _ -> AjaxMessage.SendAjax |> AjaxMessage |> dispatch)][ str "Login"]
+                div [] [str model.AjaxModel.AjaxStatusMessage]
+            ]
+        )
         hr[]
     ]
 
