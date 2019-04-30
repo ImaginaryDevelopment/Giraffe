@@ -34,8 +34,10 @@ let pretendAuthentication un pwd = un = "main" && pwd = "1234"
 let signin :HttpHandler =
 
     (fun next ctx ->
+        printfn "We are running signin!"
         task{
             let! form = ctx.Request.ReadFormAsync()
+            printfn "We read the form?"
 
             let tryGetKey k = match form.TryGetValue k with | true, v -> Some v | _ -> None
 
@@ -44,6 +46,7 @@ let signin :HttpHandler =
                 // I have no idea what realm is supposed to mean
                 let realm = if ctx.Request.Host.HasValue then ctx.Request.Host.Value else "localhost"
                 let authScheme = CookieAuthenticationDefaults.AuthenticationScheme
+                printfn "pretendAuth time"
                 // stub oversimplified username/password check instead of checking a real database
                 match pretendAuthentication un pwd with
                 | false ->
