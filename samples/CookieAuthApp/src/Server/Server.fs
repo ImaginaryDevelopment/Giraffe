@@ -45,4 +45,7 @@ WebHost
     .ConfigureServices(configureServices)
     .UseUrls("http://0.0.0.0:" + port.ToString() + "/")
     .Build()
+    // to startup from the project root directory (omit tick marks)
+    // `dotnet tool install -g Fake`
+    // `fake build --target run`
     .Run()
